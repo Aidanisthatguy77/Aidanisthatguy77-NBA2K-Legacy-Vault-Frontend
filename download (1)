@@ -1,0 +1,29 @@
+import express, { type Express, type Request, type Response } from "express";
+import cors from "cors";
+import { createProxyMiddleware } from "http-proxy-middleware";
+
+const app: Express = express();
+
+app.use(cors());
+
+app.get("/api/healthz", (_req: Request, res: Response) => {
+  res.status(200).json({ status: "ok" });
+});
+
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: "http://localhost:8000",
+    changeOrigin: true,
+    on: {
+      error: (err: Error, req: Request, res: Response) => {
+        console.error("Proxy error:", err.message);
+        if (!res.headersSent) {
+          (res as any).status(502).json({ error: "Backend unavailable" });
+        }
+      },
+    },
+  })
+);
+
+export default app;

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "NBA 2k Legacy Vault"
+version = "1.0.0"
+id = "artifacts/nba-vault"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 20187
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/nba-vault run dev"
+
+[services.env]
+PORT = "20187"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/nba-vault", "run", "build"]
+publicDir = "artifacts/nba-vault/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

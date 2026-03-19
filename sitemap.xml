@@ -1,0 +1,21 @@
+{
+  "name": "NBA 2K Legacy Vault",
+  "short_name": "Vault",
+  "description": "2K15, 2K16, 2K17, 2K20 — All in one place. Persistent online. No resets. Ever.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#c9a84c",
+  "icons": [
+    {
+      "src": "/vault-hero.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/vault-hero.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

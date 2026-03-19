@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>NBA 2K Legacy Vault — 2K15 • 2K16 • 2K17 • 2K20. All in one place. Forever.</title>
+    <meta name="description" content="The NBA 2K Legacy Vault is a revolutionary concept: launch full, untouched versions of 2K15, 2K16, 2K17, and 2K20 inside modern NBA 2K. No more sunsets. No player-base split. Persistent online. Ever." />
+
+    <!-- Open Graph (Facebook, Discord, iMessage, WhatsApp) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://legacy-vault-live--burkeaidan575.replit.app/" />
+    <meta property="og:title" content="NBA 2K Legacy Vault — Bring Back the Classic Eras" />
+    <meta property="og:description" content="2K15 • 2K16 • 2K17 • 2K20 — All in one place. Persistent online. No resets. Ever. Sign the petition and make 2K hear us." />
+    <meta property="og:image" content="https://legacy-vault-live--burkeaidan575.replit.app/vault-hero.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="NBA 2K Legacy Vault" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://legacy-vault-live--burkeaidan575.replit.app/" />
+    <meta name="twitter:title" content="NBA 2K Legacy Vault — Bring Back the Classic Eras" />
+    <meta name="twitter:description" content="2K15 • 2K16 • 2K17 • 2K20 — All in one place. Persistent online. No resets. Ever." />
+    <meta name="twitter:image" content="https://legacy-vault-live--burkeaidan575.replit.app/vault-hero.png" />
+
+    <meta name="theme-color" content="#c9a84c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Legacy Vault" />
+    <link rel="apple-touch-icon" href="/vault-hero.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
