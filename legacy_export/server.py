@@ -1,0 +1,12 @@
+fastapi==0.110.1
+uvicorn==0.25.0
+python-dotenv==1.2.1
+pydantic==2.12.5
+python-multipart==0.0.22
+httpx==0.28.1
+beautifulsoup4==4.12.3
+anthropic==0.49.0
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+starlette==0.37.2
+google-cloud-storage==2.19.0
