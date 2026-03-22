@@ -779,7 +779,8 @@ async def get_game(game_id: str):
     return game
 
 @api_router.post("/games", response_model=Game)
-async def create_game(game_data: GameCreate):
+async def create_game(game_data: GameCreate, request: Request):
+    _require_admin_token(request)
     game = Game(**game_data.model_dump())
     conn = get_db()
     cur = conn.cursor()
@@ -791,7 +792,8 @@ async def create_game(game_data: GameCreate):
     return game
 
 @api_router.put("/games/{game_id}", response_model=Game)
-async def update_game(game_id: str, game_data: GameUpdate):
+async def update_game(game_id: str, game_data: GameUpdate, request: Request):
+    _require_admin_token(request)
     conn = get_db()
     cur = conn.cursor()
     cur.execute('SELECT * FROM games WHERE id = %s', (game_id,))
@@ -810,7 +812,8 @@ async def update_game(game_id: str, game_data: GameUpdate):
     return updated
 
 @api_router.delete("/games/{game_id}")
-async def delete_game(game_id: str):
+async def delete_game(game_id: str, request: Request):
+    _require_admin_token(request)
     conn = get_db()
     cur = conn.cursor()
     cur.execute('DELETE FROM games WHERE id = %s', (game_id,))
@@ -1277,7 +1280,8 @@ async def get_clips_by_game(game_id: str):
     return clips
 
 @api_router.post("/clips", response_model=Clip)
-async def create_clip(clip_data: ClipCreate):
+async def create_clip(clip_data: ClipCreate, request: Request):
+    _require_admin_token(request)
     clip = Clip(**clip_data.model_dump())
     conn = get_db()
     cur = conn.cursor()
@@ -1288,7 +1292,8 @@ async def create_clip(clip_data: ClipCreate):
     return clip
 
 @api_router.put("/clips/{clip_id}", response_model=Clip)
-async def update_clip(clip_id: str, clip_data: ClipUpdate):
+async def update_clip(clip_id: str, clip_data: ClipUpdate, request: Request):
+    _require_admin_token(request)
     conn = get_db()
     cur = conn.cursor()
     cur.execute('SELECT * FROM clips WHERE id = %s', (clip_id,))
@@ -1307,7 +1312,8 @@ async def update_clip(clip_id: str, clip_data: ClipUpdate):
     return updated
 
 @api_router.delete("/clips/{clip_id}")
-async def delete_clip(clip_id: str):
+async def delete_clip(clip_id: str, request: Request):
+    _require_admin_token(request)
     conn = get_db()
     cur = conn.cursor()
     cur.execute('DELETE FROM clips WHERE id = %s', (clip_id,))
@@ -1315,7 +1321,8 @@ async def delete_clip(clip_id: str):
     return {"message": "Clip deleted"}
 
 @api_router.delete("/clips/game/{game_id}")
-async def delete_all_clips_for_game(game_id: str):
+async def delete_all_clips_for_game(game_id: str, request: Request):
+    _require_admin_token(request)
     conn = get_db()
     cur = conn.cursor()
     cur.execute('DELETE FROM clips WHERE game_id = %s', (game_id,))
@@ -1742,7 +1749,8 @@ async def get_creator_submissions(status: Optional[str] = None):
     return subs
 
 @api_router.put("/creator-submissions/{submission_id}")
-async def update_submission_status(submission_id: str, status: str):
+async def update_submission_status(submission_id: str, status: str, request: Request):
+    _require_admin_token(request)
     if status not in ["pending", "approved", "rejected"]:
         raise HTTPException(status_code=400, detail="Invalid status")
     conn = get_db()
@@ -1763,7 +1771,8 @@ async def get_community_posts():
     return posts
 
 @api_router.post("/community-posts")
-async def create_community_post(post: CommunityPost):
+async def create_community_post(post: CommunityPost, request: Request):
+    _require_admin_token(request)
     post_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc).isoformat()
     conn = get_db()
@@ -1776,7 +1785,8 @@ async def create_community_post(post: CommunityPost):
     return {**post.model_dump(), "id": post_id, "created_at": now}
 
 @api_router.delete("/community-posts/{post_id}")
-async def delete_community_post(post_id: str):
+async def delete_community_post(post_id: str, request: Request):
+    _require_admin_token(request)
     conn = get_db()
     cur = conn.cursor()
     cur.execute('DELETE FROM community_posts WHERE id = %s', (post_id,))
@@ -1795,7 +1805,8 @@ async def get_social_feed():
     return items
 
 @api_router.post("/social-feed")
-async def add_social_feed_item(item: SocialFeedItem):
+async def add_social_feed_item(item: SocialFeedItem, request: Request):
+    _require_admin_token(request)
     item_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc).isoformat()
     conn = get_db()
@@ -1806,7 +1817,8 @@ async def add_social_feed_item(item: SocialFeedItem):
     return {**item.model_dump(), "id": item_id, "created_at": now}
 
 @api_router.delete("/social-feed/{item_id}")
-async def delete_social_feed_item(item_id: str):
+async def delete_social_feed_item(item_id: str, request: Request):
+    _require_admin_token(request)
     conn = get_db()
     cur = conn.cursor()
     cur.execute('DELETE FROM social_feed WHERE id = %s', (item_id,))
@@ -2977,9 +2989,9 @@ async def doctor_solve(body: dict = Body(...)):
 
     file_snippets = []
     FILES_TO_READ = [
-        (Path(BACKEND_ROOT) / "server.py", 7000),
-        (Path(SITE_ROOT) / "src/pages/AdminPage.jsx", 4000),
-        (Path(SITE_ROOT) / "src/pages/LandingPage.jsx", 2500),
+        (Path(BACKEND_ROOT) / "app" / "main.py", 7000),
+        (Path(SITE_ROOT) / "src" / "App.tsx", 4500),
+        (Path(SITE_ROOT) / "src" / "main.tsx", 2500),
     ]
     for fpath, maxlen in FILES_TO_READ:
         try:
@@ -3136,6 +3148,8 @@ def doctor_diagnostic():
         try:
             t0 = time.time()
             req = _ur.Request(f"http://127.0.0.1:8000{path}", method=method)
+            if path.startswith("/api/admin"):
+                req.add_header("x-admin-token", ADMIN_TOKEN)
             _ur.urlopen(req, timeout=3)
             ms = int((time.time() - t0) * 1000)
             report.append({"check": f"route_{name.lower().replace(' ','_')}", "label": name,
