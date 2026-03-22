@@ -346,3 +346,13 @@ Then in Railway:
 6. Deploy and test:
    - `GET https://<backend-domain>/api/health`
    - `POST https://<backend-domain>/api/admin/login`
+
+## One-command predeploy check
+
+Run this before pushing/deploying:
+
+```bash
+./scripts/predeploy_check.sh
+```
+
+If you want a short no-code launch flow, follow `DEPLOY_NOW.md`.
