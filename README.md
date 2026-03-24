@@ -49,6 +49,7 @@ Admin URL: `http://localhost:5173/admin`
 
 `frontend/.env`:
 - `VITE_API_BASE_URL=http://localhost:8000`
+  - Optional in production if frontend and backend are served from same origin
 
 ## Final local verification checklist (simple mode)
 

@@ -2,7 +2,21 @@ import { FormEvent, useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import { Link, Route, Routes } from 'react-router-dom'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+function resolveApiBase() {
+  const envBase = import.meta.env.VITE_API_BASE_URL
+  if (envBase && String(envBase).trim()) return String(envBase).trim()
+
+  // Local dev fallback
+  if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+    return 'http://localhost:8000'
+  }
+
+  // Public deploy fallback: assume same-origin reverse proxy
+  if (typeof window !== 'undefined') return window.location.origin
+  return 'http://localhost:8000'
+}
+
+const API_BASE = resolveApiBase()
 const TOKEN_KEY = 'vault_admin_token'
 
 type AdminTab =
