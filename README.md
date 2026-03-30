@@ -85,3 +85,8 @@ See `DEPLOY_NOW.md` for the fastest path to publish.
 ## Free deploy (all-in)
 
 If you want the fastest no-cost launch path, follow `FREE_DEPLOY_ALLIN.md` (Render free backend+DB + Vercel hobby frontend).
+
+
+## Frontend only (get it up right now)
+
+If you want the frontend running immediately without waiting on backend setup, use `FRONTEND_NOW.md`.

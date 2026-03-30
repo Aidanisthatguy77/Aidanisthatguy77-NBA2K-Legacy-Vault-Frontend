@@ -8,6 +8,7 @@ function AdminPage() {
   const [activeTab, setActiveTab] = useState<AdminTab>('Dashboard')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [apiReachable, setApiReachable] = useState<boolean | null>(null)
 
   const [content, setContent] = useState<Record<string, string>>({})
   const [contentKey, setContentKey] = useState('hero_headline')
@@ -57,6 +58,16 @@ function AdminPage() {
     [token],
   )
 
+
+  useEffect(() => {
+    let cancelled = false
+    axios
+      .get(`${API_BASE}/api/health`, { timeout: 3000 })
+      .then(() => { if (!cancelled) setApiReachable(true) })
+      .catch(() => { if (!cancelled) setApiReachable(false) })
+    return () => { cancelled = true }
+  }, [])
+
   const login = async (e: FormEvent) => {
     e.preventDefault()
     setError('')
@@ -65,8 +76,12 @@ function AdminPage() {
       localStorage.setItem(TOKEN_KEY, res.data.token)
       setToken(res.data.token)
       setPassword('')
-    } catch {
-      setError('Invalid password')
+    } catch (e: any) {
+      if (!e?.response) {
+        setError('Backend is unreachable. Frontend is running, but API is offline.')
+      } else {
+        setError('Invalid password')
+      }
     }
   }
 
@@ -252,6 +267,9 @@ function AdminPage() {
     return (
       <main className="container">
         <h1>Admin Login</h1>
+        {apiReachable === false && (
+          <p className="error">Backend API is currently offline. Start backend to use admin features.</p>
+        )}
         <form onSubmit={login} className="stack">
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Admin password" />
           <button type="submit">Login</button>
